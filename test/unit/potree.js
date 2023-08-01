@@ -3,7 +3,7 @@ import PotreeLayer from 'Layer/PotreeLayer';
 import PotreeSource from 'Source/PotreeSource';
 import View from 'Core/View';
 import GlobeView from 'Core/Prefab/GlobeView';
-import HttpsProxyAgent from 'https-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import Coordinates from 'Core/Geographic/Coordinates';
 import PotreeNode from 'Core/PotreeNode';
 import PointsMaterial from 'Renderer/PointsMaterial';
@@ -49,7 +49,7 @@ describe('Potree', function () {
                 assert.equal(layer.root.children.length, 7);
                 layer.bboxes.visible = true;
                 done();
-            }, done);
+            }).catch(done);
     });
 
     it('preupdate potree layer', function () {
@@ -64,7 +64,7 @@ describe('Potree', function () {
             .then(() => {
                 assert.equal(potreeLayer.group.children.length, 1);
                 done();
-            }, done);
+            }).catch(done);
     });
 
     it('postUpdate potree layer', function () {
@@ -88,19 +88,18 @@ describe('Potree', function () {
                 .then(() => {
                     assert.equal(7, root.children.length);
                     done();
-                }, done);
+                }).catch(done);
         });
 
         it('load child node', function (done) {
             const root = new PotreeNode(numPoints, childrenBitField, potreeLayer);
             root.loadOctree()
-                .then(() => {
-                    root.children[0].load()
-                        .then(() => {
-                            assert.equal(2, root.children[0].children.length);
-                            done();
-                        });
-                }, done);
+                .then(() => root.children[0].load()
+                    .then(() => {
+                        assert.equal(2, root.children[0].children.length);
+                        done();
+                    }),
+                ).catch(done);
         });
     });
 
