@@ -3,6 +3,7 @@ import GeometryLayer from 'Layer/GeometryLayer';
 import { init3dTilesLayer, pre3dTilesUpdate, process3dTilesNode } from 'Process/3dTilesProcessing';
 import C3DTileset from 'Core/3DTiles/C3DTileset';
 import C3DTExtensions from 'Core/3DTiles/C3DTExtensions';
+import { PNTS_MODE } from 'Renderer/PointsMaterial';
 // eslint-disable-next-line no-unused-vars
 import Style from 'Core/Style';
 import C3DTFeature from 'Core/3DTiles/C3DTFeature';
@@ -12,9 +13,17 @@ export const C3DTILES_LAYER_EVENTS = {
     /**
      * Fires when a tile content has been loaded
      * @event C3DTilesLayer#on-tile-content-loaded
-     * @property type {string} on-tile-content-loaded
+     * @type {object}
+     * @property {THREE.Object3D} tileContent - object3D of the tile
      */
     ON_TILE_CONTENT_LOADED: 'on-tile-content-loaded',
+    /**
+     * Fires when a tile is requested
+     * @event C3DTilesLayer#on-tile-requested
+     * @type {object}
+     * @property {object} metadata - tile
+     */
+    ON_TILE_REQUESTED: 'on-tile-requested',
 };
 
 const update = process3dTilesNode();
@@ -60,6 +69,7 @@ class C3DTilesLayer extends GeometryLayer {
      * @param {Number} [config.cleanupDelay=1000] The time (in ms) after which a tile content (and its children) are
      * removed from the scene.
      * @param {C3DTExtensions} [config.registeredExtensions] 3D Tiles extensions managers registered for this tileset.
+     * @param {String} [config.pntsMode= PNTS_MODE.COLOR] {@link PointsMaterials} Point cloud coloring mode. Only 'COLOR' or 'CLASSIFICATION' are possible. COLOR uses RGB colors of the points, CLASSIFICATION uses a classification property of the batch table to color points.
      * @param {Style} [config.style=null] - style used for this layer
      * @param  {View}  view  The view
      */
@@ -71,6 +81,16 @@ class C3DTilesLayer extends GeometryLayer {
         this.protocol = '3d-tiles';
         this.name = config.name;
         this.registeredExtensions = config.registeredExtensions || new C3DTExtensions();
+
+        this.pntsMode = PNTS_MODE.COLOR;
+        this.classification = config.classification;
+
+
+        if (config.pntsMode) {
+            const exists = Object.values(PNTS_MODE).includes(config.pntsMode);
+            if (!exists) { console.warn("The points cloud mode doesn't exist. Use 'COLOR' or 'CLASSIFICATION' instead."); } else { this.pntsMode = config.pntsMode; }
+        }
+
 
         /** @type {Style} */
         this._style = config.style || null;
@@ -88,7 +108,7 @@ class C3DTilesLayer extends GeometryLayer {
 
         if (config.onTileContentLoaded) {
             console.warn('DEPRECATED onTileContentLoaded should not be passed at the contruction, use C3DTILES_LAYER_EVENTS.ON_TILE_CONTENT_LOADED event instead');
-            this.addEventListener(C3DTilesLayer.EVENT_TILE_CONTENT_LOADED, config.onTileContentLoaded);
+            this.addEventListener(C3DTILES_LAYER_EVENTS.ON_TILE_CONTENT_LOADED, config.onTileContentLoaded);
         }
 
         if (config.overrideMaterials) {

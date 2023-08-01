@@ -1,5 +1,5 @@
 import assert from 'assert';
-import HttpsProxyAgent from 'https-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import View from 'Core/View';
 import GlobeView from 'Core/Prefab/GlobeView';
 import Coordinates from 'Core/Geographic/Coordinates';
@@ -18,7 +18,7 @@ describe('Entwine Point Tile', function () {
         source.whenReady
             .then(() => {
                 done();
-            }, done);
+            }).catch(done);
     });
 
     describe('Layer', function () {
@@ -45,7 +45,7 @@ describe('Entwine Point Tile', function () {
             View.prototype.addLayer.call(view, layer)
                 .then(() => {
                     done();
-                }, done);
+                }).catch(done);
         });
 
         it('pre updates and finds the root', () => {
@@ -70,7 +70,7 @@ describe('Entwine Point Tile', function () {
                         .then(() => {
                             done();
                         });
-                }, done);
+                }).catch(done);
         });
 
         it('post updates', function () {
