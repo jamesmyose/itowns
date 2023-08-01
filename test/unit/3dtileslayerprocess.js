@@ -3,7 +3,7 @@ import C3DTilesLayer from 'Layer/C3DTilesLayer';
 import C3DTilesSource from 'Source/C3DTilesSource';
 import View from 'Core/View';
 import GlobeView from 'Core/Prefab/GlobeView';
-import HttpsProxyAgent from 'https-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import Coordinates from 'Core/Geographic/Coordinates';
 import Renderer from './bootstrap';
 
@@ -35,7 +35,7 @@ describe('3Dtiles layer', function () {
             .then((layer) => {
                 assert.equal(layer.root.children.length, 1);
                 done();
-            }, done);
+            }).catch(done);
     });
     it('preUpdate 3dtiles layer', function () {
         const elements = threedTilesLayer.preUpdate(context, new Set([threedTilesLayer]));

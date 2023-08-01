@@ -4,7 +4,7 @@ import GeoidLayer from 'Layer/GeoidLayer';
 import FileSource from 'Source/FileSource';
 import Coordinates from 'Core/Geographic/Coordinates';
 import GlobeView from 'Core/Prefab/GlobeView';
-import HttpsProxyAgent from 'https-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import Extent from 'Core/Geographic/Extent';
 import OBB from 'Renderer/OBB';
 import TileMesh from 'Core/TileMesh';
@@ -44,7 +44,7 @@ describe('GlobeView', function () {
         view.addLayer(geoidLayer)
             .then(() => {
                 done();
-            }, done);
+            }).catch(done);
     });
 
     it('update geoid layer', function (done) {
@@ -55,6 +55,6 @@ describe('GlobeView', function () {
                         assert.equal(tile.geoidHeight, 45.72800064087844);
                         done();
                     });
-            }, done);
+            }).catch(done);
     });
 });

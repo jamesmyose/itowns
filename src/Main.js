@@ -1,5 +1,5 @@
 const conf = {
-    version: '2.39.0',
+    version: '2.40.0',
 };
 export const REVISION = conf.version;
 
@@ -19,7 +19,7 @@ export { VIEW_EVENTS } from 'Core/View';
 export { default as FeatureProcessing } from 'Process/FeatureProcessing';
 export { updateLayeredMaterialNodeImagery, updateLayeredMaterialNodeElevation } from 'Process/LayeredMaterialNodeProcessing';
 export { default as OrientedImageCamera } from 'Renderer/OrientedImageCamera';
-export { default as PointsMaterial } from 'Renderer/PointsMaterial';
+export { default as PointsMaterial, PNTS_MODE, ClassificationScheme } from 'Renderer/PointsMaterial';
 export { default as GlobeControls } from 'Controls/GlobeControls';
 export { default as FlyControls } from 'Controls/FlyControls';
 export { default as FirstPersonControls } from 'Controls/FirstPersonControls';
